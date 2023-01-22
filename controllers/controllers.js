@@ -122,6 +122,48 @@ const updatePerson = async (req, res) => {
     // }
 
 
+    const filterperson = async (req, res) =>{
+
+
+        try{
+            
+            const {name, fields} = req.query
+            const queries ={}
+            let results =  Person.find(queries)
+    
+            if(name){
+    
+                queries.name = {$regex:name, $option:'i'}
+            }
+
+            if(fields){
+
+                const fieldlist = fields.split(',').join(' ')
+
+                results = results.select(fieldlist)
+            }
+
+
+
+
+
+            const human =  await results
+
+            res.status(200).json({human})
+        }
+
+        catch(error){
+
+            res.status(500).json({msg: error})
+        }
+
+        
+
+
+
+    } 
+
+
 
 
 
@@ -130,5 +172,5 @@ module.exports = {   postPerson,
                      getPerson, 
                      updatePerson,
                      singlePerson,
-                        
+                     filterperson
                 }
